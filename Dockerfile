@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 ENV TZ=Asia/Tokyo
 ENV PATH="/root/.cargo/bin:$PATH"
 RUN apt-get update && apt-get install -y tzdata
@@ -13,18 +13,46 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     liblzma-dev \
     lib32z1 \
+    file \
+    zip \
+    tmux \
+    gdbserver \
+    rubygems \
+    wget \
+    # Forensics
+    exiftool \
+    foremost \
     # Python
     python3-dev \
     python3-pip \
     python-is-python3 \
     # Pwnable
     patchelf
+
+# Python
+RUN pip install \
+    pycryptodome \
+    pwntools \
+    angr
+
 # Rust
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-# Crypto
-RUN pip install pycryptodome
-# Pwnable
-RUN pip install pwntools
 RUN cargo install pwninit
-RUN git clone https://github.com/longld/peda.git ~/peda \
-    && echo "source ~/peda/peda.py" >> ~/.gdbinit
+
+# pwndbg
+RUN git clone https://github.com/pwndbg/pwndbg \
+    && cd pwndbg \
+    && ./setup.sh
+
+# starship
+RUN curl -sS https://starship.rs/install.sh | sh -s -- -y
+RUN echo 'eval "$(starship init bash)"' >> ~/.bashrc
+
+# radare2
+RUN git clone https://github.com/radareorg/radare2 \
+    && radare2/sys/install.sh
+RUN echo 'alias gdb="LC_CTYPE=C.UTF-8 gdb"' >> ~/.bashrc
+
+# tmux
+RUN echo "set -g prefix C-j" >> ~/.tmux.conf && \
+    echo "unbind C-b" >> ~/.tmux.conf
