@@ -27,7 +27,9 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python-is-python3 \
     # Pwnable
-    patchelf
+    patchelf \
+    # Ruby
+    ruby-dev
 
 # Python
 RUN pip install \
@@ -43,6 +45,9 @@ RUN cargo install pwninit
 RUN git clone https://github.com/pwndbg/pwndbg \
     && cd pwndbg \
     && ./setup.sh
+
+# secomp-tools & one_gadget
+RUN gem install seccomp-tools one_gadget
 
 # starship
 RUN curl -sS https://starship.rs/install.sh | sh -s -- -y
