@@ -1,6 +1,6 @@
 # ctf-env
 
-CTF 用の環境構築 for Apple Silicon
+CTF environment for Apple Silicon
 
 ## Docker
 
@@ -18,7 +18,7 @@ mamba install sage
 python -c "from sage.all import *; print(factor(123))" # 3 * 41
 ```
 
-### ctftools
+## ctftools
 
 ref. <https://github.com/zukash/ctftools>
 
